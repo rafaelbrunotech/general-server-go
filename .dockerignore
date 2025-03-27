@@ -1,0 +1,14 @@
+.git/
+
+api/
+build/
+configs/
+deployments/
+docs/
+githooks/
+scripts/
+
+.gitignore
+.tool-versions
+Dockerfile
+README.md

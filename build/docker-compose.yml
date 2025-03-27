@@ -1,0 +1,54 @@
+services:
+
+  server:
+    container_name: general_server_go
+    init: true
+    env_file:
+      - ../configs/.env.${ENV}
+    build:
+      context: ../.
+      target: ${ENV}
+      args:
+        BUILD_DATE: date -u +'%Y-%m-%dT%H:%M:%SZ'
+        BUILD_VERSION: 0.0.1
+        PORT: 8080
+    ports:
+      - 8080:8080
+    depends_on:
+      postgres:
+        condition: service_healthy
+        restart: true
+    healthcheck:
+      test: curl --insecure https://127.0.0.1:8080 || exit 1
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+    restart: always
+    develop:
+      watch:
+        - action: rebuild
+          path: ../.
+          target: /app
+
+  postgres:
+    image: postgres:17
+    container_name: postgres
+    env_file:
+      - ../configs/.env.${ENV}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    ports:
+      - 5432:5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER}"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 10s
+
+volumes:
+  postgres_data:

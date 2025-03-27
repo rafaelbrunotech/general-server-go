@@ -1,0 +1,38 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+# @name createUser
+POST {{baseUrl}}/users HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "name": "User 2"
+}
+
+###
+
+
+# @name updateUser
+PATCH {{baseUrl}}/users HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "name": "User 1",
+    "userId": "0195d460-74e9-73ec-b1a7-bda7ddfc302e"
+}
+
+###
+
+
+# @name getUserById
+GET {{baseUrl}}/users/0195d460-74e9-73ec-b1a7-bda7ddfc302e HTTP/1.1
+Content-Type: {{contentType}}
+
+###
+
+
+# @name getUsers
+GET {{baseUrl}}/users HTTP/1.1
+Content-Type: {{contentType}}
+
+###

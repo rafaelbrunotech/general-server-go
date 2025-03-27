@@ -1,0 +1,1 @@
+ENV=dev DB_NAME=general DB_PASSWORD=G3n3r4L53rv3R DB_USER=postgres docker compose -f ./build/docker-compose.yml up --watch --remove-orphans
