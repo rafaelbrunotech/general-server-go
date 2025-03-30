@@ -1,0 +1,4 @@
+{
+  "./lib/*.{js,ts}": ["npm run format", "npm run lint-folder lib", "git add lib"],
+  "./*.{js,ts}": ["npm run format", "npm run lint-folder .", "git add ."]
+}

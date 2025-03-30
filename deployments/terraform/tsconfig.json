@@ -1,0 +1,46 @@
+{
+  "compilerOptions": {
+    "alwaysStrict": true,
+    "baseUrl": ".",
+    "declaration": true,
+    "experimentalDecorators": true,
+    "inlineSourceMap": true,
+    "inlineSources": true,
+    "lib": [
+      "es2018"
+    ],
+    "module": "CommonJS",
+    "noEmitOnError": true,
+    "noFallthroughCasesInSwitch": true,
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "resolveJsonModule": true,
+    "strict": true,
+    "strictNullChecks": true,
+    "strictPropertyInitialization": true,
+    "stripInternal": true,
+    "target": "ES2018",
+    "incremental": true,
+    "skipLibCheck": true,
+    "paths": {
+      "@aws/*": ["./.gen/providers/aws/*"],
+      "@common/*": ["./src/common/*"],
+      "@constructs/*": ["./lib/constructs/*"],
+      "@core/*": ["./lib/core/*"],
+      "@shared/*": ["./lib/shared/*"],
+      "@lib/*": ["./lib/*"],
+      "@services/*": ["./src/services/*"],
+      "/opt/nodejs/*": ["./src/*"]
+    },
+  },
+  "include": [
+    "**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "cdktf.out"
+  ]
+}

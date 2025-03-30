@@ -1,0 +1,6 @@
+**/.gen
+**/node_modules
+**/*tsconfig.json
+**/coverage
+**/.history
+**/.scannerwork
