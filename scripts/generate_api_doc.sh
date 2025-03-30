@@ -1,0 +1,1 @@
+cd ./api/api-doc && tsp compile . && cd ../..

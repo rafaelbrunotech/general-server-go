@@ -7,7 +7,7 @@ import (
 )
 
 type ApiRequest struct {
-	id        *valueobject.Id
+	id        string
 	AuthToken string
 	Endpoint  string
 	Timestamp time.Time
@@ -19,7 +19,7 @@ func NewApiRequest(
 	timestamp time.Time,
 ) *ApiRequest {
 	return &ApiRequest{
-		id:        valueobject.NewId(),
+		id:        valueobject.NewId().GetValue(),
 		AuthToken: authToken,
 		Endpoint:  endpoint,
 		Timestamp: timestamp,
