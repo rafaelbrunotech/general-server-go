@@ -1,0 +1,46 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+
+# @name signIn
+POST {{baseUrl}}/sign-in HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "user1@email.com",
+    "password": "1234"
+}
+
+###
+
+@authToken = {{signIn.response.body.data.authUser.refreshToken}}
+
+###
+
+# @name updateUser
+PATCH {{baseUrl}}/users HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+{
+    "name": "User 1",
+    "userId": "0195e893-71cf-7931-b65b-0c1db04f2a0c"
+}
+
+###
+
+
+# @name getUserById
+GET {{baseUrl}}/users/0195e893-71cf-7931-b65b-0c1db04f2a0c HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+###
+
+
+# @name getUsers
+GET {{baseUrl}}/users HTTP/1.1
+Content-Type: {{contentType}}
+Authorization: Bearer {{authToken}}
+
+###

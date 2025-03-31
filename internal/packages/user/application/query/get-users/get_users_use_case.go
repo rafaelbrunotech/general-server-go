@@ -1,17 +1,17 @@
 package getusers
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
 )
 
 type GetUsersUseCase struct {
-	logger         service.ILogger
+	logger         logger.ILogger
 	userRepository repository.IUserRepository
 }
 
 func NewGetUsersUseCase(
-	logger service.ILogger,
+	logger logger.ILogger,
 	userRepository repository.IUserRepository,
 ) *GetUsersUseCase {
 	return &GetUsersUseCase{

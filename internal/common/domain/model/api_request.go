@@ -19,7 +19,7 @@ func NewApiRequest(
 	timestamp time.Time,
 ) *ApiRequest {
 	return &ApiRequest{
-		id:        valueobject.NewId().GetValue(),
+		id:        valueobject.NewId().Value(),
 		AuthToken: authToken,
 		Endpoint:  endpoint,
 		Timestamp: timestamp,

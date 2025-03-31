@@ -20,6 +20,6 @@ func NewValue(value string) *Id {
 	}
 }
 
-func (i *Id) GetValue() string {
+func (i *Id) Value() string {
 	return i.value
 }

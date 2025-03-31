@@ -1,0 +1,27 @@
+@baseUrl = http://localhost:8080
+@contentType = application/json
+
+# @name signIn
+POST {{baseUrl}}/sign-in HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "user1@email.com",
+    "password": "1234"
+}
+
+###
+
+
+# @name signUp
+POST {{baseUrl}}/sign-up HTTP/1.1
+Content-Type: {{contentType}}
+
+{
+    "email": "user1@email.com",
+    "name": "User 1",
+    "password": "1234"
+}
+
+###
+

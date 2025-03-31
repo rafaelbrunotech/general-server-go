@@ -3,7 +3,8 @@ package user
 import (
 	"github.com/rafaelbrunoss/general-server-go/internal/common"
 	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/database"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/application"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/infrastructure/controller"
@@ -14,28 +15,38 @@ type UserRepository struct{}
 type Container struct {
 	UserRepository repository.IUserRepository
 	UseCases       application.UseCases
+	AuthController controller.IAuthController
 	UserController controller.IUserController
 }
 
 func NewContainer(commonContainer *common.Container) *Container {
 	logger := commonContainer.Services.Logger
+	tokenizer := commonContainer.Services.Tokenizer
 
 	db := commonContainer.DB
 
 	userRepository := provideRepositories(db)
 
-	useCases := provideUseCases(logger, userRepository)
+	useCases := provideUseCases(logger, tokenizer, userRepository)
 
-	controller := provideController(*useCases)
+	authController := provideAuthController(*useCases)
+	userController := provideUserController(*useCases)
 
 	return &Container{
 		UserRepository: userRepository,
 		UseCases:       *useCases,
-		UserController: controller,
+		AuthController: authController,
+		UserController: userController,
 	}
 }
 
-func provideController(useCases application.UseCases) controller.IUserController {
+func provideAuthController(useCases application.UseCases) controller.IAuthController {
+	controller := controller.NewAuthController(useCases)
+
+	return controller
+}
+
+func provideUserController(useCases application.UseCases) controller.IUserController {
 	controller := controller.NewUserController(useCases)
 
 	return controller
@@ -47,8 +58,8 @@ func provideRepositories(db *database.DB) repository.IUserRepository {
 	return repository
 }
 
-func provideUseCases(logger service.ILogger, userRepository repository.IUserRepository) *application.UseCases {
-	useCases := application.NewUseCases(logger, userRepository)
+func provideUseCases(logger logger.ILogger, tokenizer tokenizer.ITokenizer, userRepository repository.IUserRepository) *application.UseCases {
+	useCases := application.NewUseCases(logger, tokenizer, userRepository)
 
 	return useCases
 }

@@ -1,9 +1,6 @@
 package model
 
-import (
-	"os"
-	"time"
-)
+import "os"
 
 type ApiResponseMetadata struct {
 	Environment string `json:"environment"`
@@ -18,11 +15,10 @@ type ApiResponseError[E any] struct {
 }
 
 type ApiResponse[T any, E any] struct {
-	Data      T                    `json:"data"`
-	Error     *ApiResponseError[E] `json:"error"`
-	Metadata  ApiResponseMetadata  `json:"metadata"`
-	Status    uint16               `json:"status"`
-	Timestamp time.Time            `json:"timestamp"`
+	Data     T                    `json:"data"`
+	Error    *ApiResponseError[E] `json:"error"`
+	Metadata ApiResponseMetadata  `json:"metadata"`
+	Status   uint16               `json:"status"`
 }
 
 func NewSuccessApiResponse[T any](
@@ -35,16 +31,14 @@ func NewSuccessApiResponse[T any](
 		Metadata: ApiResponseMetadata{
 			Environment: os.Getenv("ENV"),
 		},
-		Status:    status,
-		Timestamp: time.Now(),
+		Status: status,
 	}
 
 	return r
 }
 
 func NewErrorApiResponse[E any](
-	errorDetails E, environment string,
-
+	errorDetails E,
 	message string,
 	status uint16,
 ) *ApiResponse[any, E] {
@@ -57,8 +51,7 @@ func NewErrorApiResponse[E any](
 		Metadata: ApiResponseMetadata{
 			Environment: os.Getenv("ENV"),
 		},
-		Status:    status,
-		Timestamp: time.Now(),
+		Status: status,
 	}
 
 	return r

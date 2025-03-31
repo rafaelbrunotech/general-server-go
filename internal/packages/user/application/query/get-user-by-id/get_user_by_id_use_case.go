@@ -1,17 +1,17 @@
 package getuserbyid
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
 )
 
 type GetUserByIdUseCase struct {
-	logger         service.ILogger
+	logger         logger.ILogger
 	userRepository repository.IUserRepository
 }
 
 func NewGetUserByIdUseCase(
-	logger service.ILogger,
+	logger logger.ILogger,
 	userRepository repository.IUserRepository,
 ) *GetUserByIdUseCase {
 	return &GetUserByIdUseCase{

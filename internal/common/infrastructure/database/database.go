@@ -3,9 +3,9 @@ package database
 import (
 	"database/sql"
 	"fmt"
+	"os"
 
 	_ "github.com/lib/pq"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/config"
 )
 
 type DB struct {
@@ -13,12 +13,12 @@ type DB struct {
 }
 
 func InitDB() (*DB, error) {
-	driver := config.Env["DB_DRIVER"]
-	user := config.Env["DB_USER"]
-	name := config.Env["DB_NAME"]
-	password := config.Env["DB_PASSWORD"]
-	host := config.Env["DB_HOST"]
-	port := config.Env["DB_PORT"]
+	driver := os.Getenv("DB_DRIVER")
+	user := os.Getenv("DB_USER")
+	name := os.Getenv("DB_NAME")
+	password := os.Getenv("DB_PASSWORD")
+	host := os.Getenv("DB_HOST")
+	port := os.Getenv("DB_PORT")
 
 	connection := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable", host, port, user, password, name)
 
@@ -44,7 +44,9 @@ func createTables(db *sql.DB) {
 	createUsersTable := `
 		CREATE TABLE IF NOT EXISTS users (
 			id UUID PRIMARY KEY,
+			email VARCHAR(255) NOT NULL UNIQUE,
 			name VARCHAR(255) NOT NULL,
+			password TEXT NOT NULL,
 			created_at TIMESTAMP NOT NULL,
 			updated_at TIMESTAMP NOT NULL
 		)

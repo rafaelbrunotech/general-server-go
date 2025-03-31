@@ -5,7 +5,6 @@ import (
 )
 
 type IUserController interface {
-	CreateUser(context *gin.Context)
 	GetUserById(context *gin.Context)
 	GetUsers(context *gin.Context)
 	UpdateUser(context *gin.Context)

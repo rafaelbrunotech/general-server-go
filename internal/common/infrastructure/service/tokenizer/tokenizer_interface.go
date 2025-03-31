@@ -1,4 +1,4 @@
-package service
+package tokenizer
 
 import (
 	model "github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"

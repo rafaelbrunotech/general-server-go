@@ -1,4 +1,4 @@
-package service
+package logger
 
 import (
 	"fmt"
@@ -6,7 +6,7 @@ import (
 
 type Logger struct{}
 
-func NewLogger() (*Logger, error) {
+func New() (*Logger, error) {
 	return &Logger{}, nil
 }
 

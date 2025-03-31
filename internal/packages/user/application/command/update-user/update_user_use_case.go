@@ -1,17 +1,17 @@
 package updateuser
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
 )
 
 type UpdateUserUseCase struct {
-	logger         service.ILogger
+	logger         logger.ILogger
 	userRepository repository.IUserRepository
 }
 
 func NewUpdateUserUseCase(
-	logger service.ILogger,
+	logger logger.ILogger,
 	userRepository repository.IUserRepository,
 ) *UpdateUserUseCase {
 	return &UpdateUserUseCase{
@@ -27,7 +27,7 @@ func (u *UpdateUserUseCase) Execute(request *UpdateUserCommand) error {
 		return err
 	}
 
-	user.UpdateName(request.Name)
+	user.SetName(request.Name)
 
 	err = u.userRepository.UpdateUser(user)
 

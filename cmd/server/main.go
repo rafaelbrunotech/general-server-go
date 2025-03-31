@@ -1,8 +1,10 @@
 package main
 
 import (
+	"os"
+
 	app "github.com/rafaelbrunoss/general-server-go/internal"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/config"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/middleware"
 
 	"github.com/gin-gonic/gin"
 )
@@ -11,21 +13,30 @@ func main() {
 	container := app.CreateContainer()
 
 	server := gin.Default()
+	authenticated := server.Group("/")
+	authenticated.Use(middleware.Authenticate)
 
-	createUserApi(server, container)
+	createAuthApi(server, container)
+	createUsersApi(authenticated, container)
 
-	port := config.Env["PORT"]
+	port := os.Getenv("PORT")
 
 	server.Run(":" + port)
 
 	defer container.Common.DB.Client.Close()
 }
 
-func createUserApi(server *gin.Engine, container *app.Container) {
+func createAuthApi(server *gin.Engine, container *app.Container) {
+	authController := container.User.AuthController
+
+	server.POST("/sign-in", authController.SignIn)
+	server.POST("/sign-up", authController.SignUp)
+}
+
+func createUsersApi(authenticated *gin.RouterGroup, container *app.Container) {
 	userController := container.User.UserController
 
-	server.GET("/users", userController.GetUsers)
-	server.GET("/users/:id", userController.GetUserById)
-	server.POST("/users", userController.CreateUser)
-	server.PATCH("/users", userController.UpdateUser)
+	authenticated.GET("/users", userController.GetUsers)
+	authenticated.GET("/users/:id", userController.GetUserById)
+	authenticated.PATCH("/users", userController.UpdateUser)
 }

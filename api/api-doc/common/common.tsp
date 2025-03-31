@@ -22,7 +22,6 @@ namespace Common {
     error: ApiResponseError<E> | null;
     metadata: ApiResponseMetadata;
     status: uint16;
-    timestamp: utcDateTime;
   }
   
   model ResponseCreated<T, Status = 204> {

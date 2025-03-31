@@ -9,6 +9,7 @@ import (
 type userResponse struct {
 	Id        string    `json:"id"`
 	Name      string    `json:"name"`
+	Email     string    `json:"email"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
@@ -26,7 +27,8 @@ func NewGetUsersResponse(input GetUsersResponseInput) (*GetUsersResponse, error)
 
 	for _, user := range input.Users {
 		userResponse := userResponse{
-			Id:        user.Id.GetValue(),
+			Id:        user.Id.Value(),
+			Email:     user.Email.Value(),
 			Name:      user.Name,
 			CreatedAt: user.CreatedAt,
 			UpdatedAt: user.UpdatedAt,

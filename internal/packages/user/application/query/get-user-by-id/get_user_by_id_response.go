@@ -8,6 +8,7 @@ import (
 
 type userResponse struct {
 	Id        string    `json:"id"`
+	Email     string    `json:"email"`
 	Name      string    `json:"name"`
 	CreatedAt time.Time `json:"createdAt"`
 	UpdatedAt time.Time `json:"updatedAt"`
@@ -23,7 +24,8 @@ type GetUserByIdResponse struct {
 
 func NewGetUserByIdResponse(input GetUserByIdResponseInput) (*GetUserByIdResponse, error) {
 	userResponse := userResponse{
-		Id:        input.User.Id.GetValue(),
+		Id:        input.User.Id.Value(),
+		Email:     input.User.Email.Value(),
 		Name:      input.User.Name,
 		CreatedAt: input.User.CreatedAt,
 		UpdatedAt: input.User.UpdatedAt,

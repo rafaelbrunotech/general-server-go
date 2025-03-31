@@ -1,12 +1,14 @@
 package model
 
 type TokenData struct {
-	UserId string
+	UserId    string
+	UserEmail string
 }
 
-func NewTokenData(userId string) *TokenData {
+func NewTokenData(userId string, userEmail string) *TokenData {
 	t := &TokenData{
-		UserId: userId,
+		UserId:    userId,
+		UserEmail: userEmail,
 	}
 
 	return t

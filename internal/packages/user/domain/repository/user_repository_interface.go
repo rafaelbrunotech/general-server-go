@@ -7,6 +7,7 @@ import (
 
 type IUserRepository interface {
 	CreateUser(user *entity.User) error
+	GetUserByEmail(email *valueobject.Email) (*entity.User, error)
 	GetUserById(id *valueobject.Id) (*entity.User, error)
 	GetUsers() ([]entity.User, error)
 	UpdateUser(user *entity.User) error

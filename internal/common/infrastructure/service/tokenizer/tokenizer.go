@@ -1,11 +1,11 @@
-package service
+package tokenizer
 
 import (
 	"errors"
+	"os"
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/config"
 	model "github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
 )
 
@@ -13,8 +13,8 @@ type Tokenizer struct {
 	secret []byte
 }
 
-func NewTokenizer() (*Tokenizer, error) {
-	secret := []byte(config.Env["JWT_SECRET"])
+func New() (*Tokenizer, error) {
+	secret := []byte(os.Getenv("JWT_SECRET"))
 
 	return &Tokenizer{
 		secret: secret,
@@ -47,7 +47,8 @@ func (t *Tokenizer) DecodeToken(token string) (*model.TokenData, error) {
 	}
 
 	userId := claims["userId"].(string)
-	tokenData := model.NewTokenData(userId)
+	// userEmail := claims["userEmail"].(string)
+	tokenData := model.NewTokenData(userId, "")
 
 	return tokenData, nil
 }

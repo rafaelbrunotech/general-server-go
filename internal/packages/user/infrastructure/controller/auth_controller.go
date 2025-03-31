@@ -6,89 +6,22 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
 	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/application"
-	updateuser "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/update-user"
-	getuserbyid "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-user-by-id"
-	getusers "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-users"
+	signin "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-in"
+	signup "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-up"
 )
 
-type UserController struct {
+type AuthController struct {
 	useCases application.UseCases
 }
 
-func NewUserController(useCases application.UseCases) *UserController {
-	return &UserController{
+func NewAuthController(useCases application.UseCases) *AuthController {
+	return &AuthController{
 		useCases: useCases,
 	}
 }
 
-func (c *UserController) GetUserById(context *gin.Context) {
-	userId := context.Param("id")
-
-	query, err := getuserbyid.NewGetUserByIdQuery(getuserbyid.GetUserByIdQueryInput{UserId: userId})
-
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	response, err := c.useCases.Query.GetUserById.Execute(query)
-
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
-}
-
-func (c *UserController) GetUsers(context *gin.Context) {
-	query, err := getusers.NewGetUsersQuery(getusers.GetUsersQueryInput{})
-
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	response, err := c.useCases.Query.GetUsers.Execute(query)
-
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
-}
-
-func (c *UserController) UpdateUser(context *gin.Context) {
-	var request updateuser.UpdateUserCommandInput
+func (c *AuthController) SignIn(context *gin.Context) {
+	var request signin.SignInCommandInput
 	err := context.ShouldBindJSON(&request)
 
 	if err != nil {
@@ -103,7 +36,7 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 		return
 	}
 
-	command, err := updateuser.NewUpdateUserCommand(request)
+	command, err := signin.NewSignInCommand(request)
 
 	if err != nil {
 		context.JSON(
@@ -117,7 +50,7 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 		return
 	}
 
-	err = c.useCases.Command.UpdateUser.Execute(command)
+	response, err := c.useCases.Command.SignIn.Execute(command)
 
 	if err != nil {
 		context.JSON(
@@ -131,5 +64,52 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 		return
 	}
 
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse("", http.StatusOK))
+	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
+}
+
+func (c *AuthController) SignUp(context *gin.Context) {
+	var request signup.SignUpCommandInput
+	err := context.ShouldBindJSON(&request)
+
+	if err != nil {
+		context.JSON(
+			http.StatusUnprocessableEntity,
+			model.NewErrorApiResponse(
+				"",
+				err.Error(),
+				http.StatusUnprocessableEntity,
+			),
+		)
+		return
+	}
+
+	command, err := signup.NewSignUpCommand(request)
+
+	if err != nil {
+		context.JSON(
+			http.StatusUnprocessableEntity,
+			model.NewErrorApiResponse(
+				"",
+				err.Error(),
+				http.StatusUnprocessableEntity,
+			),
+		)
+		return
+	}
+
+	response, err := c.useCases.Command.SignUp.Execute(command)
+
+	if err != nil {
+		context.JSON(
+			http.StatusUnprocessableEntity,
+			model.NewErrorApiResponse(
+				"",
+				err.Error(),
+				http.StatusUnprocessableEntity,
+			),
+		)
+		return
+	}
+
+	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
 }

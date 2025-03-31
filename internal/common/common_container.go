@@ -2,12 +2,13 @@ package common
 
 import (
 	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/database"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
 )
 
 type Services struct {
-	Tokenizer service.ITokenizer
-	Logger    service.ILogger
+	Logger    logger.ILogger
+	Tokenizer tokenizer.ITokenizer
 }
 
 type Container struct {
@@ -41,13 +42,13 @@ func provideDatabase() *database.DB {
 }
 
 func provideServices() *Services {
-	logger, err := service.NewLogger()
+	logger, err := logger.New()
 
 	if err != nil {
 		panic(err)
 	}
 
-	tokenizer, err := service.NewTokenizer()
+	tokenizer, err := tokenizer.New()
 
 	if err != nil {
 		panic(err)
