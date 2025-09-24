@@ -1,12 +1,11 @@
 # general-server-go
 
-A robust, **enterprise-grade server application** built with Go, implementing **Domain-Driven Design (DDD)** and **Clean Architecture** principles. Demonstrates Go best practices, including proper project structure, dependency injection, and comprehensive testing.
+A boilerplate, **enterprise-grade server application** built with Go, implementing **Domain-Driven Design (DDD)** and **Clean Architecture** principles. Demonstrates Go best practices, including proper project structure, dependency injection, and comprehensive testing.
 
----
 
-## 🏗️ Architecture
+## 🏛️ Architecture
 
-This project follows **Clean Architecture** and DDD principles to ensure **separation of concerns, testability, and maintainability**.
+This project follows **Clean Architecture** and **DDD** principles to ensure **separation of concerns, testability, and maintainability**.
 
 
 ### Layers
@@ -24,33 +23,30 @@ This project follows **Clean Architecture** and DDD principles to ensure **separ
 - **Repositories**: Abstract interfaces for persistence and retrieval  
 - **Use Cases / Application Services**: Coordinate domain logic and implement workflows  
 
----
 
 ## 🚀 Features
 
 - JWT-based **authentication & authorization**
-- Event-driven architecture with **domain events**
 - **Dependency injection** with a container-based approach
 - Comprehensive **unit and integration tests**
 - **TypeSpec**-generated OpenAPI documentation
 - Docker multi-stage builds for **dev, test, prod**
+
+
+## 🏗️ Feature Under Progress
+- Event-driven architecture with **domain events**
 - Terraform CDK for **cloud deployment**
 
----
 
 ## 🛠️ Technology Stack
 
 - **Language**: Go 1.25.1  
 - **Web Framework**: Gin  
 - **Database**: PostgreSQL (`lib/pq`)  
-- **Authentication**: JWT (`golang-jwt/jwt/v5`)  
-- **Password Hashing**: bcrypt (`golang.org/x/crypto`)  
-- **UUID Generation**: `google/uuid`  
 - **API Documentation**: TypeSpec  
 - **Containerization**: Docker multi-stage builds  
 - **Infrastructure**: Terraform CDK (TypeScript)
 
----
 
 ## 📁 Project Structure
 
@@ -75,7 +71,6 @@ Following [Go project layout standards](https://github.com/golang-standards/proj
 └── test/                       # End-to-end tests
 ```
 
----
 
 ## 🚀 Getting Started
 
@@ -100,8 +95,7 @@ Following [Go project layout standards](https://github.com/golang-standards/proj
 
 3. **Set up environment variables**
    ```bash
-   cp configs/.env.example configs/.env.dev
-   # Edit configs/.env.dev with your database credentials
+   # Edit configs/.env.dev with your env variables
    ```
 
 4. **Run with Docker Compose**
@@ -113,6 +107,11 @@ Following [Go project layout standards](https://github.com/golang-standards/proj
 ## 📚 API Documentation
 
 This project uses **TypeSpec** for API documentation generation:
+
+### Prerequisites
+
+- Node.js >= v22.0.0
+
 
 ### Generate API Documentation
 
@@ -154,11 +153,7 @@ go test ./...
 
 # Run tests with coverage
 go test -cover ./...
-
-# Run tests with verbose output
-go test -v ./...
 ```
-
 
 ## 🐳 Docker
 
@@ -183,7 +178,7 @@ You can check the commands [here](docs/TERRAFORM.md)
 
 - **Linting**: Pre-commit hooks for code quality
 - **Testing**: Comprehensive unit and integration tests
-- **Architecture**: Clean Architecture with dependency inversion
+- **Architecture**: DDD nd Clean Architecture with dependency inversion
 - **Error Handling**: Structured error handling with custom domain errors
 
 ### Git Hooks

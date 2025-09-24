@@ -14,14 +14,14 @@ type UserInput struct {
 }
 
 type UserRestoreInput struct {
-	Id        string    `json:"id"`
-	Email     string    `json:"email"`
-	Name      string    `json:"name"`
-	Password  string    `json:"password"`
-	CreatedAt time.Time `json:"createdAt"`
+	Id        string     `json:"id"`
+	Email     string     `json:"email"`
+	Name      string     `json:"name"`
+	Password  string     `json:"password"`
+	CreatedAt time.Time  `json:"createdAt"`
 	DeletedAt *time.Time `json:"deletedAt"`
-	IsDeleted bool		`json:"isDeleted"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	IsDeleted bool       `json:"isDeleted"`
+	UpdatedAt time.Time  `json:"updatedAt"`
 }
 
 type User struct {

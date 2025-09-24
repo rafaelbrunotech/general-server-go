@@ -3,10 +3,10 @@ package updateuser
 import (
 	"net/http"
 
-	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
 	model "github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
 	usererrors "github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/error"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
 )
 
 type UpdateUserUseCase struct {

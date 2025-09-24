@@ -7,8 +7,8 @@ import (
 )
 
 var (
-    EmailCannotBeEmpty = errors.New("email cannot be empty")
-    EmailInvalidFormat = errors.New("invalid email format")
+	EmailCannotBeEmpty = errors.New("email cannot be empty")
+	EmailInvalidFormat = errors.New("invalid email format")
 )
 
 type Email struct {

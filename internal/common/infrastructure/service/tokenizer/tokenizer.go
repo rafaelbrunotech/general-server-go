@@ -10,10 +10,10 @@ import (
 )
 
 var (
-    UnexpectedSigningMethod = errors.New("unexpected signing method")
-    CouldNotParseToken = errors.New("could not parse the token")
-    InvalidToken = errors.New("invalid token")
-    InvalidTokenClaims = errors.New("invalid token claims")
+	UnexpectedSigningMethod = errors.New("unexpected signing method")
+	CouldNotParseToken      = errors.New("could not parse the token")
+	InvalidToken            = errors.New("invalid token")
+	InvalidTokenClaims      = errors.New("invalid token claims")
 )
 
 type Tokenizer struct {
@@ -59,7 +59,7 @@ func (t *Tokenizer) DecodeToken(token string) (*model.TokenData, error) {
 	if userId == "" || userEmail == "" {
 		return nil, InvalidTokenClaims
 	}
-	
+
 	tokenData := model.NewTokenData(userId, userEmail)
 
 	return tokenData, nil
@@ -95,18 +95,18 @@ func (t *Tokenizer) VerifyToken(token string) error {
 
 func (t *Tokenizer) GenerateAccessToken(tokenData model.TokenData) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId": tokenData.UserId,
+		"userId":    tokenData.UserId,
 		"userEmail": tokenData.UserEmail,
-		"exp":    time.Now().Add(time.Hour * 24).Unix(),
+		"exp":       time.Now().Add(time.Hour * 24).Unix(),
 	})
 	return token.SignedString(t.secret)
 }
 
 func (t *Tokenizer) GenerateRefreshToken(tokenData model.TokenData) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
-		"userId": tokenData.UserId,
+		"userId":    tokenData.UserId,
 		"userEmail": tokenData.UserEmail,
-		"exp":    time.Now().Add(time.Hour * 24 * 7).Unix(),
+		"exp":       time.Now().Add(time.Hour * 24 * 7).Unix(),
 	})
 	return token.SignedString(t.secret)
 }

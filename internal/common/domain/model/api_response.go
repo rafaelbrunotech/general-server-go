@@ -18,7 +18,7 @@ type ApiResponse[T any, E any] struct {
 	Data     *T                   `json:"data"`
 	Error    *ApiResponseError[E] `json:"error"`
 	Metadata ApiResponseMetadata  `json:"metadata"`
-	Status   int               	  `json:"status"`
+	Status   int                  `json:"status"`
 }
 
 func NewSuccessApiResponse[T any, E any](

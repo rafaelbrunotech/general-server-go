@@ -31,13 +31,13 @@ func InitDB() (*DB, error) {
 	}
 
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-    defer cancel()
+	defer cancel()
 
-	err = db.PingContext(ctx);
+	err = db.PingContext(ctx)
 
-    if err != nil {
-        return nil, fmt.Errorf("failed to ping DB: %w", err)
-    }
+	if err != nil {
+		return nil, fmt.Errorf("failed to ping DB: %w", err)
+	}
 
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
@@ -50,5 +50,5 @@ func InitDB() (*DB, error) {
 }
 
 func (db *DB) Close() error {
-    return db.Client.Close()
+	return db.Client.Close()
 }
