@@ -1,13 +1,13 @@
 package user
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/database"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/application"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/infrastructure/controller"
+	"github.com/rafaelbrunotech/general-server-go/internal/common"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/database"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/tokenizer"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/application"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/infrastructure/controller"
 )
 
 type UserRepository struct{}

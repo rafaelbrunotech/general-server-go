@@ -1,7 +1,7 @@
 package entity
 
 import (
-	valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
+	valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
 )
 
 type AuthUserInput struct {

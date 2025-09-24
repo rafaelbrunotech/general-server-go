@@ -1,9 +1,9 @@
 package common
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/database"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/database"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/tokenizer"
 )
 
 type Services struct {
@@ -33,6 +33,7 @@ func (c *Container) GetDB() *database.DB {
 
 func provideDatabase() *database.DB {
 	database, err := database.InitDB()
+	// defer database.Close()
 
 	if err != nil {
 		panic(err)

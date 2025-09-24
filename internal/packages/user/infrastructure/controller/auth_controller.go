@@ -4,10 +4,10 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/application"
-	signin "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-in"
-	signup "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-up"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/application"
+	signin "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/sign-in"
+	signup "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/sign-up"
 )
 
 type AuthController struct {
@@ -27,8 +27,8 @@ func (c *AuthController) SignIn(context *gin.Context) {
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"input",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -36,13 +36,13 @@ func (c *AuthController) SignIn(context *gin.Context) {
 		return
 	}
 
-	command, err := signin.NewSignInCommand(request)
+	command, err := signin.NewCommand(request)
 
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"command",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -50,21 +50,9 @@ func (c *AuthController) SignIn(context *gin.Context) {
 		return
 	}
 
-	response, err := c.useCases.Command.SignIn.Execute(command)
+	response := c.useCases.Command.SignIn.Execute(command)
 
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
+	context.JSON(response.Status, response)
 }
 
 func (c *AuthController) SignUp(context *gin.Context) {
@@ -74,8 +62,8 @@ func (c *AuthController) SignUp(context *gin.Context) {
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"input",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -83,13 +71,13 @@ func (c *AuthController) SignUp(context *gin.Context) {
 		return
 	}
 
-	command, err := signup.NewSignUpCommand(request)
+	command, err := signup.NewCommand(request)
 
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"command",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -97,19 +85,7 @@ func (c *AuthController) SignUp(context *gin.Context) {
 		return
 	}
 
-	response, err := c.useCases.Command.SignUp.Execute(command)
+	response := c.useCases.Command.SignUp.Execute(command)
 
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
+	context.JSON(response.Status, response)
 }

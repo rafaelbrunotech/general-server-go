@@ -1,11 +1,14 @@
 package signin
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
+	"net/http"
+
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/tokenizer"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
+	usererrors "github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/error"
 )
 
 type SignInUseCase struct {
@@ -14,7 +17,7 @@ type SignInUseCase struct {
 	userRepository repository.IUserRepository
 }
 
-func NewSignInUseCase(
+func NewUseCase(
 	logger logger.ILogger,
 	tokenizer tokenizer.ITokenizer,
 	userRepository repository.IUserRepository,
@@ -26,30 +29,30 @@ func NewSignInUseCase(
 	}
 }
 
-func (u *SignInUseCase) Execute(request *SignInCommand) (*SignInResponse, error) {
+func (u *SignInUseCase) Execute(request *SignInCommand) *model.ApiResponse[SignInResponse, string] {
 	user, err := u.userRepository.GetUserByEmail(request.Email)
 
 	if err != nil {
-		return nil, err
+		return model.NewErrorApiResponse[SignInResponse, string]("user", usererrors.UserNotFound.Error(), http.StatusNotFound)
 	}
 
 	isCorrect := user.IsPasswordCorrect(request.Password)
 
 	if !isCorrect {
-		return nil, err
+		return model.NewErrorApiResponse[SignInResponse, string]("email_or_password", usererrors.UserInvalidEmailOrPassword.Error(), http.StatusUnprocessableEntity)
 	}
 
 	tokenData := *model.NewTokenData(user.Id.Value(), user.Email.Value())
 	accessToken, err := u.tokenizer.GenerateAccessToken(tokenData)
 
 	if err != nil {
-		return nil, err
+		return model.NewErrorApiResponse[SignInResponse, string]("accessToken", err.Error(), http.StatusInternalServerError)
 	}
 
 	refreshToken, err := u.tokenizer.GenerateRefreshToken(tokenData)
 
 	if err != nil {
-		return nil, err
+		return model.NewErrorApiResponse[SignInResponse, string]("refreshToken", err.Error(), http.StatusInternalServerError)
 	}
 
 	authUser := entity.NewAuthUser(entity.AuthUserInput{
@@ -59,11 +62,11 @@ func (u *SignInUseCase) Execute(request *SignInCommand) (*SignInResponse, error)
 		RefreshToken: refreshToken,
 	})
 
-	response, err := NewSignInResponse(SignInResponseInput{AuthUser: authUser})
+	response, err := NewResponse(SignInResponseInput{AuthUser: authUser})
 
 	if err != nil {
-		return nil, err
+		return model.NewErrorApiResponse[SignInResponse, string]("response", err.Error(), http.StatusInternalServerError)
 	}
 
-	return response, nil
+	return model.NewSuccessApiResponse[SignInResponse, string](response, http.StatusOK)
 }

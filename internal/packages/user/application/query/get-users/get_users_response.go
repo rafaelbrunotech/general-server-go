@@ -3,7 +3,7 @@ package getusers
 import (
 	"time"
 
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
 )
 
 type userResponse struct {
@@ -22,7 +22,7 @@ type GetUsersResponse struct {
 	Users []userResponse `json:"users"`
 }
 
-func NewGetUsersResponse(input GetUsersResponseInput) (*GetUsersResponse, error) {
+func NewResponse(input GetUsersResponseInput) (*GetUsersResponse, error) {
 	var users []userResponse
 
 	for _, user := range input.Users {

@@ -1,8 +1,12 @@
 package updateuser
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
+	"net/http"
+
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
+	model "github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	usererrors "github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/error"
 )
 
 type UpdateUserUseCase struct {
@@ -10,7 +14,7 @@ type UpdateUserUseCase struct {
 	userRepository repository.IUserRepository
 }
 
-func NewUpdateUserUseCase(
+func NewUseCase(
 	logger logger.ILogger,
 	userRepository repository.IUserRepository,
 ) *UpdateUserUseCase {
@@ -20,11 +24,11 @@ func NewUpdateUserUseCase(
 	}
 }
 
-func (u *UpdateUserUseCase) Execute(request *UpdateUserCommand) error {
+func (u *UpdateUserUseCase) Execute(request *UpdateUserCommand) *model.ApiResponse[any, string] {
 	user, err := u.userRepository.GetUserById(request.UserId)
 
 	if err != nil {
-		return err
+		return model.NewErrorApiResponse[any, string]("user", usererrors.UserNotFound.Error(), http.StatusNotFound)
 	}
 
 	user.SetName(request.Name)
@@ -32,8 +36,8 @@ func (u *UpdateUserUseCase) Execute(request *UpdateUserCommand) error {
 	err = u.userRepository.UpdateUser(user)
 
 	if err != nil {
-		return err
+		return model.NewErrorApiResponse[any, string]("user", err.Error(), http.StatusInternalServerError)
 	}
 
-	return nil
+	return model.NewSuccessApiResponse[any, string](nil, http.StatusOK)
 }

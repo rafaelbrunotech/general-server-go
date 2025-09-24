@@ -3,7 +3,7 @@ package getuserbyid
 import (
 	"time"
 
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
 )
 
 type userResponse struct {
@@ -22,7 +22,7 @@ type GetUserByIdResponse struct {
 	User userResponse `json:"user"`
 }
 
-func NewGetUserByIdResponse(input GetUserByIdResponseInput) (*GetUserByIdResponse, error) {
+func NewResponse(input GetUserByIdResponseInput) (*GetUserByIdResponse, error) {
 	userResponse := userResponse{
 		Id:        input.User.Id.Value(),
 		Email:     input.User.Email.Value(),

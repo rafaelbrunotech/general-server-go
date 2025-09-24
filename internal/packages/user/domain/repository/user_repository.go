@@ -1,9 +1,9 @@
 package repository
 
 import (
-	valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
-	db "github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/database"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
+	valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
+	db "github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/database"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
 )
 
 type UserRepository struct {
@@ -22,9 +22,11 @@ func (u *UserRepository) CreateUser(user *entity.User) error {
 			name,
 			password,
 			created_at,
+			deleted_at,
+			is_deleted,
 			updated_at
 		) VALUES (
-			$1, $2, $3, $4, $5, $6
+			$1, $2, $3, $4, $5, $6, $7, $8
 		);
 	`
 
@@ -42,6 +44,8 @@ func (u *UserRepository) CreateUser(user *entity.User) error {
 		user.Name,
 		user.Password,
 		user.CreatedAt,
+		user.DeletedAt,
+		user.IsDeleted,
 		user.UpdatedAt,
 	)
 
@@ -60,6 +64,8 @@ func (u *UserRepository) GetUserByEmail(email *valueobject.Email) (*entity.User,
 			name,
 			password,
 			created_at,
+			deleted_at,
+			is_deleted,
 			updated_at
 		FROM users
 		WHERE email = $1;
@@ -79,6 +85,8 @@ func (u *UserRepository) GetUserByEmail(email *valueobject.Email) (*entity.User,
 		return nil, err
 	}
 
+	defer rows.Close()
+
 	var user entity.User
 
 	for rows.Next() {
@@ -89,6 +97,8 @@ func (u *UserRepository) GetUserByEmail(email *valueobject.Email) (*entity.User,
 			&userInput.Name,
 			&userInput.Password,
 			&userInput.CreatedAt,
+			&userInput.DeletedAt,
+			&userInput.IsDeleted,
 			&userInput.UpdatedAt,
 		)
 
@@ -114,6 +124,8 @@ func (u *UserRepository) GetUserById(id *valueobject.Id) (*entity.User, error) {
 			name,
 			password,
 			created_at,
+			deleted_at,
+			is_deleted,
 			updated_at
 		FROM users
 		WHERE id = $1;
@@ -143,6 +155,8 @@ func (u *UserRepository) GetUserById(id *valueobject.Id) (*entity.User, error) {
 			&userInput.Name,
 			&userInput.Password,
 			&userInput.CreatedAt,
+			&userInput.DeletedAt,
+			&userInput.IsDeleted,
 			&userInput.UpdatedAt,
 		)
 
@@ -168,6 +182,8 @@ func (u *UserRepository) GetUsers() ([]entity.User, error) {
 			name,
 			password,
 			created_at,
+			deleted_at,
+			is_deleted,
 			updated_at
 		FROM users;
 	`
@@ -196,6 +212,8 @@ func (u *UserRepository) GetUsers() ([]entity.User, error) {
 			&userInput.Name,
 			&userInput.Password,
 			&userInput.CreatedAt,
+			&userInput.DeletedAt,
+			&userInput.IsDeleted,
 			&userInput.UpdatedAt,
 		)
 
@@ -222,7 +240,9 @@ func (u *UserRepository) UpdateUser(user *entity.User) error {
 			email = $2,
 			name = $3,
 			password = $4,
-			updated_at = $5
+			deleted_at = $5,
+			is_deleted = $6,
+			updated_at = $7
 		WHERE id = $1;
 	`
 
@@ -239,6 +259,8 @@ func (u *UserRepository) UpdateUser(user *entity.User) error {
 		user.Email.Value(),
 		user.Name,
 		user.Password,
+		user.DeletedAt,
+		user.IsDeleted,
 		user.UpdatedAt,
 	)
 

@@ -1,6 +1,6 @@
 package signin
 
-import valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
+import valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
 
 type SignInCommandInput struct {
 	Email    string `json:"email"`
@@ -12,7 +12,7 @@ type SignInCommand struct {
 	Password string
 }
 
-func NewSignInCommand(input SignInCommandInput) (*SignInCommand, error) {
+func NewCommand(input SignInCommandInput) (*SignInCommand, error) {
 	email, err := valueobject.NewEmail(input.Email)
 
 	if err != nil {

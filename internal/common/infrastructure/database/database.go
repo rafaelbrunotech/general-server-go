@@ -1,9 +1,11 @@
 package database
 
 import (
+	"context"
 	"database/sql"
 	"fmt"
 	"os"
+	"time"
 
 	_ "github.com/lib/pq"
 )
@@ -25,37 +27,28 @@ func InitDB() (*DB, error) {
 	db, err := sql.Open(driver, connection)
 
 	if err != nil {
-		panic(err)
-	} else {
-		fmt.Println("Database connected")
+		return nil, fmt.Errorf("failed to open DB: %w", err)
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+    defer cancel()
+
+	err = db.PingContext(ctx);
+
+    if err != nil {
+        return nil, fmt.Errorf("failed to ping DB: %w", err)
+    }
 
 	db.SetMaxOpenConns(10)
 	db.SetMaxIdleConns(5)
 
-	createTables(db)
+	fmt.Println("Database connected")
 
 	return &DB{
 		Client: db,
 	}, nil
 }
 
-func createTables(db *sql.DB) {
-	createUsersTable := `
-		CREATE TABLE IF NOT EXISTS users (
-			id UUID PRIMARY KEY,
-			email VARCHAR(255) NOT NULL UNIQUE,
-			name VARCHAR(255) NOT NULL,
-			password TEXT NOT NULL,
-			created_at TIMESTAMP NOT NULL,
-			updated_at TIMESTAMP NOT NULL
-		)
-	`
-
-	_, err := db.Exec(createUsersTable)
-
-	if err != nil {
-		fmt.Println("Create tables failed")
-		panic(err)
-	}
+func (db *DB) Close() error {
+    return db.Client.Close()
 }

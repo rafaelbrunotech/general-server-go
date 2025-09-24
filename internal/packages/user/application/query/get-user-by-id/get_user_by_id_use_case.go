@@ -1,8 +1,12 @@
 package getuserbyid
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
+	"net/http"
+
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
+	usererrors "github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/error"
 )
 
 type GetUserByIdUseCase struct {
@@ -10,7 +14,7 @@ type GetUserByIdUseCase struct {
 	userRepository repository.IUserRepository
 }
 
-func NewGetUserByIdUseCase(
+func NewUseCase(
 	logger logger.ILogger,
 	userRepository repository.IUserRepository,
 ) *GetUserByIdUseCase {
@@ -20,18 +24,18 @@ func NewGetUserByIdUseCase(
 	}
 }
 
-func (u *GetUserByIdUseCase) Execute(request *GetUserByIdQuery) (*GetUserByIdResponse, error) {
+func (u *GetUserByIdUseCase) Execute(request *GetUserByIdQuery) *model.ApiResponse[GetUserByIdResponse, string] {
 	user, err := u.userRepository.GetUserById(request.UserId)
 
 	if err != nil {
-		return nil, err
+		return model.NewErrorApiResponse[GetUserByIdResponse, string]("user", usererrors.UserNotFound.Error(), http.StatusNotFound)
 	}
 
-	response, err := NewGetUserByIdResponse(GetUserByIdResponseInput{User: *user})
+	response, err := NewResponse(GetUserByIdResponseInput{User: *user})
 
 	if err != nil {
-		return nil, err
+		model.NewErrorApiResponse[GetUserByIdResponse, string]("response", err.Error(), http.StatusInternalServerError)
 	}
 
-	return response, nil
+	return model.NewSuccessApiResponse[GetUserByIdResponse, string](response, http.StatusOK)
 }

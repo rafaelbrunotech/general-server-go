@@ -1,14 +1,14 @@
 package application
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/logger"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
-	signin "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-in"
-	signup "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/sign-up"
-	updateuser "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/update-user"
-	getuserbyid "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-user-by-id"
-	getusers "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-users"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/repository"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/logger"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/tokenizer"
+	signin "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/sign-in"
+	signup "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/sign-up"
+	updateuser "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/update-user"
+	getuserbyid "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/query/get-user-by-id"
+	getusers "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/query/get-users"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/repository"
 )
 
 type CommandUseCases struct {
@@ -28,9 +28,9 @@ type UseCases struct {
 }
 
 func newCommandUseCases(logger logger.ILogger, tokenizer tokenizer.ITokenizer, userRepository repository.IUserRepository) *CommandUseCases {
-	signIn := signin.NewSignInUseCase(logger, tokenizer, userRepository)
-	signUp := signup.NewSignUpUseCase(logger, tokenizer, userRepository)
-	updateUser := updateuser.NewUpdateUserUseCase(logger, userRepository)
+	signIn := signin.NewUseCase(logger, tokenizer, userRepository)
+	signUp := signup.NewUseCase(logger, tokenizer, userRepository)
+	updateUser := updateuser.NewUseCase(logger, userRepository)
 
 	return &CommandUseCases{
 		SignIn:     signIn,
@@ -40,8 +40,8 @@ func newCommandUseCases(logger logger.ILogger, tokenizer tokenizer.ITokenizer, u
 }
 
 func newQueryUseCases(logger logger.ILogger, userRepository repository.IUserRepository) *QueryUseCases {
-	getUserById := getuserbyid.NewGetUserByIdUseCase(logger, userRepository)
-	getUsers := getusers.NewGetUsersUseCase(logger, userRepository)
+	getUserById := getuserbyid.NewUseCase(logger, userRepository)
+	getUsers := getusers.NewUseCase(logger, userRepository)
 
 	return &QueryUseCases{
 		GetUserById: getUserById,

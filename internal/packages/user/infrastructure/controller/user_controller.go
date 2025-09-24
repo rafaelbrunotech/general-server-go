@@ -4,11 +4,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/application"
-	updateuser "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/command/update-user"
-	getuserbyid "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-user-by-id"
-	getusers "github.com/rafaelbrunoss/general-server-go/internal/packages/user/application/query/get-users"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/application"
+	updateuser "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/command/update-user"
+	getuserbyid "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/query/get-user-by-id"
+	getusers "github.com/rafaelbrunotech/general-server-go/internal/packages/user/application/query/get-users"
 )
 
 type UserController struct {
@@ -24,13 +24,13 @@ func NewUserController(useCases application.UseCases) *UserController {
 func (c *UserController) GetUserById(context *gin.Context) {
 	userId := context.Param("id")
 
-	query, err := getuserbyid.NewGetUserByIdQuery(getuserbyid.GetUserByIdQueryInput{UserId: userId})
+	query, err := getuserbyid.NewQuery(getuserbyid.GetUserByIdQueryInput{UserId: userId})
 
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"query",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -38,31 +38,19 @@ func (c *UserController) GetUserById(context *gin.Context) {
 		return
 	}
 
-	response, err := c.useCases.Query.GetUserById.Execute(query)
+	response := c.useCases.Query.GetUserById.Execute(query)
 
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
+	context.JSON(response.Status, response)
 }
 
 func (c *UserController) GetUsers(context *gin.Context) {
-	query, err := getusers.NewGetUsersQuery(getusers.GetUsersQueryInput{})
+	query, err := getusers.NewQuery(getusers.GetUsersQueryInput{})
 
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"query",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -70,21 +58,9 @@ func (c *UserController) GetUsers(context *gin.Context) {
 		return
 	}
 
-	response, err := c.useCases.Query.GetUsers.Execute(query)
+	response := c.useCases.Query.GetUsers.Execute(query)
 
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse(response, http.StatusOK))
+	context.JSON(response.Status, response)
 }
 
 func (c *UserController) UpdateUser(context *gin.Context) {
@@ -94,8 +70,8 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"input",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -103,13 +79,13 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 		return
 	}
 
-	command, err := updateuser.NewUpdateUserCommand(request)
+	command, err := updateuser.NewCommand(request)
 
 	if err != nil {
 		context.JSON(
 			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
+			model.NewErrorApiResponse[any, string](
+				"command",
 				err.Error(),
 				http.StatusUnprocessableEntity,
 			),
@@ -117,19 +93,7 @@ func (c *UserController) UpdateUser(context *gin.Context) {
 		return
 	}
 
-	err = c.useCases.Command.UpdateUser.Execute(command)
+	response := c.useCases.Command.UpdateUser.Execute(command)
 
-	if err != nil {
-		context.JSON(
-			http.StatusUnprocessableEntity,
-			model.NewErrorApiResponse(
-				"",
-				err.Error(),
-				http.StatusUnprocessableEntity,
-			),
-		)
-		return
-	}
-
-	context.JSON(http.StatusOK, model.NewSuccessApiResponse("", http.StatusOK))
+	context.JSON(response.Status, response)
 }

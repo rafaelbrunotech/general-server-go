@@ -6,7 +6,14 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
-	model "github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
+	model "github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+)
+
+var (
+    UnexpectedSigningMethod = errors.New("unexpected signing method")
+    CouldNotParseToken = errors.New("could not parse the token")
+    InvalidToken = errors.New("invalid token")
+    InvalidTokenClaims = errors.New("invalid token claims")
 )
 
 type Tokenizer struct {
@@ -26,29 +33,34 @@ func (t *Tokenizer) DecodeToken(token string) (*model.TokenData, error) {
 		_, ok := _token.Method.(*jwt.SigningMethodHMAC)
 
 		if !ok {
-			return nil, errors.New("unexpected signing method")
+			return nil, UnexpectedSigningMethod
 		}
 
 		return t.secret, nil
 	})
 
 	if err != nil {
-		return nil, errors.New("could not parse the token")
+		return nil, CouldNotParseToken
 	}
 
 	if !parsedToken.Valid {
-		return nil, errors.New("invalid token")
+		return nil, InvalidToken
 	}
 
 	claims, ok := parsedToken.Claims.(jwt.MapClaims)
 
 	if !ok {
-		return nil, errors.New("invalid token claims")
+		return nil, InvalidTokenClaims
 	}
 
 	userId := claims["userId"].(string)
-	// userEmail := claims["userEmail"].(string)
-	tokenData := model.NewTokenData(userId, "")
+	userEmail := claims["userEmail"].(string)
+
+	if userId == "" || userEmail == "" {
+		return nil, InvalidTokenClaims
+	}
+	
+	tokenData := model.NewTokenData(userId, userEmail)
 
 	return tokenData, nil
 }
@@ -58,24 +70,24 @@ func (t *Tokenizer) VerifyToken(token string) error {
 		_, ok := _token.Method.(*jwt.SigningMethodHMAC)
 
 		if !ok {
-			return nil, errors.New("unexpected signing method")
+			return nil, UnexpectedSigningMethod
 		}
 
 		return t.secret, nil
 	})
 
 	if err != nil {
-		return errors.New("could not parse the token")
+		return CouldNotParseToken
 	}
 
 	if !parsedToken.Valid {
-		return errors.New("invalid token")
+		return InvalidToken
 	}
 
 	_, ok := parsedToken.Claims.(jwt.MapClaims)
 
 	if !ok {
-		return errors.New("invalid token claims")
+		return InvalidTokenClaims
 	}
 
 	return nil
@@ -84,6 +96,7 @@ func (t *Tokenizer) VerifyToken(token string) error {
 func (t *Tokenizer) GenerateAccessToken(tokenData model.TokenData) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": tokenData.UserId,
+		"userEmail": tokenData.UserEmail,
 		"exp":    time.Now().Add(time.Hour * 24).Unix(),
 	})
 	return token.SignedString(t.secret)
@@ -92,6 +105,7 @@ func (t *Tokenizer) GenerateAccessToken(tokenData model.TokenData) (string, erro
 func (t *Tokenizer) GenerateRefreshToken(tokenData model.TokenData) (string, error) {
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"userId": tokenData.UserId,
+		"userEmail": tokenData.UserEmail,
 		"exp":    time.Now().Add(time.Hour * 24 * 7).Unix(),
 	})
 	return token.SignedString(t.secret)

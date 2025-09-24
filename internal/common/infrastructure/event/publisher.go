@@ -1,6 +1,10 @@
 package event
 
-import "github.com/rafaelbrunoss/general-server-go/internal/common/domain/event"
+import (
+	"errors"
+
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/event"
+)
 
 type Publisher struct {
 	observers []event.IObserver
@@ -18,7 +22,7 @@ func (p *Publisher) Publish(command event.ICommand) error {
 			err := observer.Notify(command)
 
 			if err != nil {
-				panic(err)
+				return errors.New("failed to notify observer")
 			}
 		}
 	}

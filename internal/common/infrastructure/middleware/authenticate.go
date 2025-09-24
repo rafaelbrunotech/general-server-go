@@ -4,8 +4,8 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/service/tokenizer"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/service/tokenizer"
 )
 
 func Authenticate(context *gin.Context) {
@@ -14,7 +14,7 @@ func Authenticate(context *gin.Context) {
 	if len(token) < 7 || token[:7] != "Bearer " {
 		context.AbortWithStatusJSON(
 			http.StatusUnauthorized,
-			model.NewErrorApiResponse(
+			model.NewErrorApiResponse[any, string](
 				"",
 				"Unauthorized",
 				http.StatusUnauthorized,
@@ -30,7 +30,7 @@ func Authenticate(context *gin.Context) {
 	if err != nil {
 		context.AbortWithStatusJSON(
 			http.StatusUnauthorized,
-			model.NewErrorApiResponse(
+			model.NewErrorApiResponse[any, string](
 				"",
 				"Tokenizer unavailable",
 				http.StatusUnauthorized,
@@ -43,7 +43,7 @@ func Authenticate(context *gin.Context) {
 
 	if err != nil {
 		context.AbortWithStatusJSON(http.StatusUnauthorized,
-			model.NewErrorApiResponse(
+			model.NewErrorApiResponse[any, string](
 				"",
 				"Unauthorized",
 				http.StatusUnauthorized,

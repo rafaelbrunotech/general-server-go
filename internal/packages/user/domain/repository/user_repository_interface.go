@@ -1,8 +1,8 @@
 package repository
 
 import (
-	valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
+	valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
 )
 
 type IUserRepository interface {

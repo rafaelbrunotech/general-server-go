@@ -1,6 +1,6 @@
 package updateuser
 
-import valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
+import valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
 
 type UpdateUserCommandInput struct {
 	UserId   string `json:"userId"`
@@ -16,7 +16,7 @@ type UpdateUserCommand struct {
 	Password string
 }
 
-func NewUpdateUserCommand(input UpdateUserCommandInput) (*UpdateUserCommand, error) {
+func NewCommand(input UpdateUserCommandInput) (*UpdateUserCommand, error) {
 	return &UpdateUserCommand{
 		UserId:   valueobject.NewValue(input.UserId),
 		Email:    input.Email,

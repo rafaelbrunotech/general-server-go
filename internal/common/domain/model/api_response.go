@@ -15,17 +15,17 @@ type ApiResponseError[E any] struct {
 }
 
 type ApiResponse[T any, E any] struct {
-	Data     T                    `json:"data"`
+	Data     *T                   `json:"data"`
 	Error    *ApiResponseError[E] `json:"error"`
 	Metadata ApiResponseMetadata  `json:"metadata"`
-	Status   uint16               `json:"status"`
+	Status   int               	  `json:"status"`
 }
 
-func NewSuccessApiResponse[T any](
-	data T,
-	status uint16,
-) *ApiResponse[T, any] {
-	r := &ApiResponse[T, any]{
+func NewSuccessApiResponse[T any, E any](
+	data *T,
+	status int,
+) *ApiResponse[T, E] {
+	r := &ApiResponse[T, E]{
 		Data:  data,
 		Error: nil,
 		Metadata: ApiResponseMetadata{
@@ -37,12 +37,12 @@ func NewSuccessApiResponse[T any](
 	return r
 }
 
-func NewErrorApiResponse[E any](
+func NewErrorApiResponse[T any, E any](
 	errorDetails E,
 	message string,
-	status uint16,
-) *ApiResponse[any, E] {
-	r := &ApiResponse[any, E]{
+	status int,
+) *ApiResponse[T, E] {
+	r := &ApiResponse[T, E]{
 		Data: nil,
 		Error: &ApiResponseError[E]{
 			Message: message,

@@ -1,7 +1,7 @@
 package tokenizer
 
 import (
-	model "github.com/rafaelbrunoss/general-server-go/internal/common/domain/model"
+	model "github.com/rafaelbrunotech/general-server-go/internal/common/domain/model"
 )
 
 type ITokenizer interface {

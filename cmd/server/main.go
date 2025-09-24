@@ -3,8 +3,8 @@ package main
 import (
 	"os"
 
-	app "github.com/rafaelbrunoss/general-server-go/internal"
-	"github.com/rafaelbrunoss/general-server-go/internal/common/infrastructure/middleware"
+	app "github.com/rafaelbrunotech/general-server-go/internal"
+	"github.com/rafaelbrunotech/general-server-go/internal/common/infrastructure/middleware"
 
 	"github.com/gin-gonic/gin"
 )

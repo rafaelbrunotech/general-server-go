@@ -1,9 +1,14 @@
 package valueobject
 
 import (
-	"fmt"
+	"errors"
 	"regexp"
 	"strings"
+)
+
+var (
+    EmailCannotBeEmpty = errors.New("email cannot be empty")
+    EmailInvalidFormat = errors.New("invalid email format")
 )
 
 type Email struct {
@@ -14,14 +19,14 @@ func NewEmail(value string) (*Email, error) {
 	email := strings.TrimSpace(value)
 
 	if email == "" {
-		return nil, fmt.Errorf("email cannot be empty")
+		return nil, EmailCannotBeEmpty
 	}
 
 	email = strings.ToLower(email)
 
 	regex := regexp.MustCompile(`^[^\s@]+@[^\s@]+\.[^\s@]+$`)
 	if !regex.MatchString(email) {
-		return nil, fmt.Errorf("invalid email format")
+		return nil, EmailInvalidFormat
 	}
 
 	return &Email{value: email}, nil

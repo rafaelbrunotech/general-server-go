@@ -12,7 +12,7 @@ type SignUpCommand struct {
 	Password string
 }
 
-func NewSignUpCommand(input SignUpCommandInput) (*SignUpCommand, error) {
+func NewCommand(input SignUpCommandInput) (*SignUpCommand, error) {
 	return &SignUpCommand{
 		Email:    input.Email,
 		Name:     input.Name,

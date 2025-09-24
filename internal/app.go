@@ -1,8 +1,8 @@
 package app
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/common"
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user"
+	"github.com/rafaelbrunotech/general-server-go/internal/common"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user"
 )
 
 type Container struct {

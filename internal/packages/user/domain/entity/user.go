@@ -3,7 +3,7 @@ package entity
 import (
 	"time"
 
-	valueobject "github.com/rafaelbrunoss/general-server-go/internal/common/domain/value-object"
+	valueobject "github.com/rafaelbrunotech/general-server-go/internal/common/domain/value-object"
 	"golang.org/x/crypto/bcrypt"
 )
 
@@ -19,6 +19,8 @@ type UserRestoreInput struct {
 	Name      string    `json:"name"`
 	Password  string    `json:"password"`
 	CreatedAt time.Time `json:"createdAt"`
+	DeletedAt *time.Time `json:"deletedAt"`
+	IsDeleted bool		`json:"isDeleted"`
 	UpdatedAt time.Time `json:"updatedAt"`
 }
 
@@ -28,6 +30,8 @@ type User struct {
 	Name      string
 	Password  string
 	CreatedAt time.Time
+	DeletedAt *time.Time
+	IsDeleted bool
 	UpdatedAt time.Time
 }
 
@@ -43,6 +47,8 @@ func NewUser(input UserInput) (*User, error) {
 		Email:     email,
 		Name:      input.Name,
 		CreatedAt: time.Now(),
+		DeletedAt: nil,
+		IsDeleted: false,
 		UpdatedAt: time.Now(),
 	}
 
@@ -100,10 +106,14 @@ func (u *User) Restore(input UserRestoreInput) error {
 	}
 
 	u.Id = valueobject.NewValue(input.Id)
+
 	u.Email = email
 	u.Name = input.Name
 	u.Password = input.Password
+
 	u.CreatedAt = input.CreatedAt
+	u.DeletedAt = input.DeletedAt
+	u.IsDeleted = input.IsDeleted
 	u.UpdatedAt = input.UpdatedAt
 
 	return nil

@@ -1,7 +1,7 @@
 package signin
 
 import (
-	"github.com/rafaelbrunoss/general-server-go/internal/packages/user/domain/entity"
+	"github.com/rafaelbrunotech/general-server-go/internal/packages/user/domain/entity"
 )
 
 type SignInResponseInput struct {
@@ -12,6 +12,6 @@ type SignInResponse struct {
 	AuthUser entity.AuthUser `json:"authUser"`
 }
 
-func NewSignInResponse(input SignInResponseInput) (*SignInResponse, error) {
+func NewResponse(input SignInResponseInput) (*SignInResponse, error) {
 	return &SignInResponse{AuthUser: input.AuthUser}, nil
 }
