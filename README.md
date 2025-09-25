@@ -33,7 +33,7 @@ This project follows **Clean Architecture** and **DDD** principles to ensure **s
 - Docker multi-stage builds for **dev, test, prod**
 
 
-## 🏗️ Feature Under Progress
+## 🏗️ Features Under Progress
 - Event-driven architecture with **domain events**
 - Terraform CDK for **cloud deployment**
 
@@ -176,7 +176,7 @@ You can check the commands [here](docs/TERRAFORM.md)
 
 ### Code Quality
 
-- **Linting**: Pre-commit hooks for code quality
+- **Linting**: Pre-commit hooks for code formatting
 - **Testing**: Comprehensive unit and integration tests
 - **Architecture**: DDD nd Clean Architecture with dependency inversion
 - **Error Handling**: Structured error handling with custom domain errors
@@ -184,9 +184,9 @@ You can check the commands [here](docs/TERRAFORM.md)
 ### Git Hooks
 
 Pre-configured git hooks for code quality:
-- `pre-commit`: Runs linting and basic checks
+- `prepare-commit-msg`: Ensures go.mod and go.sum are clean and updated
+- `pre-commit`: Formats and checks for potential bugs and suspicious code
 - `pre-push`: Runs tests before pushing
-- `prepare-commit-msg`: Formats commit messages
 
 
 ## 📖 Key Design Patterns

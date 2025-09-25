@@ -23,7 +23,7 @@ func main() {
 
 	server.Run(":" + port)
 
-	defer container.Common.DB.Client.Close()
+	defer container.Common.ShutDown()
 }
 
 func createAuthApi(server *gin.Engine, container *app.Container) {

@@ -31,9 +31,12 @@ func (c *Container) GetDB() *database.DB {
 	return c.DB
 }
 
+func (c *Container) ShutDown() {
+	c.DB.Close()
+}
+
 func provideDatabase() *database.DB {
 	database, err := database.InitDB()
-	// defer database.Close()
 
 	if err != nil {
 		panic(err)
