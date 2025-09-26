@@ -1,15 +1,26 @@
 import { App } from 'cdktf';
 
-import { AppStack } from '../lib';
-import { Environment, getStackName } from '../lib/shared';
+import {
+  DatabaseStack,
+  EcsStack,
+  MessageBrokerStack,
+  NetworkStack,
+  ObservabilityStack,
+  SecretsStack,
+} from '../lib';
+import { Environment, remoteState } from '../lib/shared';
+
+const env: Environment = process.env.ENV as Environment || Environment.DEV;
 
 const app = new App();
 
-const createEnvironment = (environment: Environment) => {
-  new AppStack(app, getStackName('app', environment), { environment });
-};
+remoteState(app, env);
 
-createEnvironment(Environment.DEV);
-createEnvironment(Environment.PROD);
+new NetworkStack(app, `network-stack-${env}`, { env });
+new EcsStack(app, `ecs-stack-${env}`, { env });
+new DatabaseStack(app, `database-stack-${env}`, { env });
+new SecretsStack(app, `secrets-stack-${env}`, { env });
+new MessageBrokerStack(app, `message-broker-stack-${env}`, { env });
+new ObservabilityStack(app, `observability-stack-${env}`, { env });
 
 app.synth();
